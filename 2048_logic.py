@@ -32,6 +32,7 @@ def random_two(mat):
                 mat[i][j] = 2
     return
 
+# Determines the current state of the game.
 def game_state(mat):
     # There are 4 cases to consider: 
     # Case 1: The game has a 2048, so you win.
@@ -66,3 +67,49 @@ def game_state(mat):
 
     # Case 4: There are no available spaces and no available moves, so you lose.
     return 'YOU LOST'
+
+# Slides all numbers compressed along the left edge.
+# Intuition is that you go through each cell and if it isn't 0, set pos cell to that value, then set the original cell to 0.
+# Then, add 1 to pos since you will now slide next non-zero value to that cell.
+def slide_sideways(mat):
+    for i in range(4):
+        pos = 0
+        for j in range(4):
+            if mat[i][j] != 0:
+                x = mat[i][j]
+                mat[i][j] = 0
+                mat[i][pos] = x
+                pos += 1
+    return mat
+
+# Adds pairs of numbers starting from the left. Sum is left term and leaves right term as 0.
+# Combining add_sideways and slide_sideways will give us our move_left and move_right functions.
+def add_sideways(mat):
+    for i in range(4):
+        for j in range(3):
+            if mat[i][j] == mat[i][j+1]:
+                mat[i][j] *= 2
+                mat[i][j+1] = 0
+    return mat
+
+# Will need this function to differentiate left-right and up-down moves.
+def reverse_rows(mat):
+    for row in mat:
+        row.reverse()
+    return mat
+
+# Slide to the left, then add, then slide to the left again.
+# Not calling random_two here because I use this function in move_right.
+def move_left(mat):
+    slide_sideways(mat)
+    add_sideways(mat)
+    slide_sideways(mat)
+    return mat
+
+# Sliding to the right is equivalent to reversing, then slide left, then reverse again.
+# Not calling random_two here because I want to keep consistency in my move_left and move_right function.
+def move_right(mat):
+    reverse_rows(mat)
+    move_left(mat)
+    reverse_rows(mat)
+    return mat
