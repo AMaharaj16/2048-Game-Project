@@ -113,3 +113,31 @@ def move_right(mat):
     move_left(mat)
     reverse_rows(mat)
     return mat
+
+# I could make completely new functions for the move_up and move_down functions, instead I will create a transpose_matrix
+# function. This function will convert rows into columns and columns into rows, which I can then use in addition to 
+# move_left and move_right to move_up and move_down
+def transpose_matrix(mat):
+    transposed = []
+    for i in range(4):
+        new_row =[]
+        for j in range(4):
+            new_row.append(mat[j][i])
+        transposed.append(new_row)
+    mat = transposed
+    return mat
+
+# Transposing converts the top row into the leftmost column. 
+# Therefore, moving up is related to moving the transposed matrix left  and transposing it again.
+def move_up(mat):
+    mat = transpose_matrix(mat)
+    mat = move_left(mat)
+    mat = transpose_matrix(mat)
+    return mat
+
+# Moving down is related to moving the transposed matrix right and transposing it again.
+def move_down(mat):
+    mat = transpose_matrix(mat)
+    mat = move_right(mat)
+    mat = transpose_matrix(mat)
+    return mat
