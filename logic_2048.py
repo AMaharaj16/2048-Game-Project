@@ -1,8 +1,10 @@
 import random
 # Will need this later when randomizing where to put the next 2.
 def start_game():
-    # Initialize game matrix
-    mat = [[0]*4]*4
+    # Initialize game matrix.
+    mat = []
+    for i in range(4):
+        mat.append([0]*4)
     random_two(mat)
 
     # Display moves available
@@ -22,7 +24,7 @@ def random_two(mat):
         cell = random.randint(0,3)
         if mat[row][cell] == 0:
             mat[row][cell] = 2
-            return
+            return mat
         searches += 1
     
     # If the random search 40 times does not find an empty space, find one manually
@@ -30,8 +32,7 @@ def random_two(mat):
         for j in range(0,3):
             if mat[i][j] == 0:
                 mat[i][j] = 2
-    return
-
+    return mat
 # Determines the current state of the game.
 def game_state(mat):
     # There are 4 cases to consider: 
