@@ -2,7 +2,7 @@ import logic_2048
 
 if __name__ == '__main__':
     mat = logic_2048.start_game()
-    print(mat)
+    logic_2048.print_mat(mat)
 
 state = 'GAME ONGOING'
 
@@ -25,5 +25,5 @@ while state == 'GAME ONGOING':
         mat = logic_2048.random_two(mat)
 
     state = logic_2048.game_state(mat)
-    print(mat)
+    logic_2048.print_mat(mat)
     print(state)
