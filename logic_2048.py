@@ -5,7 +5,7 @@ def start_game():
     mat = []
     for i in range(4):
         mat.append([0]*4)
-    random_two(mat)
+    mat = random_two(mat)
 
     # Display moves available
     print("Available Moves: ")
@@ -142,3 +142,10 @@ def move_down(mat):
     mat = move_right(mat)
     mat = transpose_matrix(mat)
     return mat
+
+# This function displays the matrix as a 4x4 grid so it is easier to see and play the game.
+def print_mat(mat):
+    for row in mat:
+        for cell in row:
+            print(f"{cell:^5}", end=" ")
+        print()
