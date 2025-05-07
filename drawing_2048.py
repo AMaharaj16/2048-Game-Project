@@ -12,6 +12,7 @@ FONT = pygame.font.SysFont('comicsans', 50, bold = True)
 BG_COLOUR = (187, 173, 160)
 GRID_COLOUR = (163, 148, 137)
 FONT_COLOUR = (121,108,100)
+VEL = 20
 
 class Tile:
     COLOURS = [
@@ -67,6 +68,47 @@ def get_random_pos(tiles):
             break
     return row, col
 
+def move_tiles(window, tiles, clock, direction):
+    changed = True
+    merged = set()     # We don't want multiple tiles merging in one move, prevented by adding merged tiles to the set.
+
+    if direction == "left":
+        sort_func = lambda x: x.col                                                 # Order tiles by column
+        reverse = False
+        delta = (-VEL, 0)                                                           # Change of tile x and y per clock tick
+        boundary_check = lambda tile: tile.col == 0                                 # Check if the tile is at the edge 
+        get_next_tile = lambda tile: tiles.get(f"{tile.row}{tile.col - 1}")         # Produce next tile
+        check_merge = lambda tile, next_tile: tile.x > next_tile.x + VEL            # Check if tile merges with next_tile in the next clock tick
+        check_move = lambda tile, next_tile: tile.x > next_tile.x + VEL + WIDTH/4   # Check if the tile moves into the square beside next_tile
+        ceil = True                                                                 # Should coord value be rounded up or down when finding col or row
+    if direction == "right":
+        sort_func = lambda x: x.col
+        reverse = True
+        delta = (VEL, 0)
+        boundary_check = lambda tile: tile.col == 3
+        get_next_tile = lambda tile: tiles.get(f"{tile.row}{tile.col + 1}")
+        check_merge = lambda tile, next_tile: tile.x > next_tile.x - VEL
+        check_move = lambda tile, next_tile: tile.x > next_tile.x - VEL - WIDTH/4
+        ceil = False
+    if direction == "up":
+        sort_func = lambda x: x.row
+        reverse = False
+        delta = (0, -VEL)
+        boundary_check = lambda tile: tile.row == 0
+        get_next_tile = lambda tile: tiles.get(f"{tile.row - 1}{tile.col}")
+        check_merge = lambda tile, next_tile: tile.x > next_tile.x + VEL
+        check_move = lambda tile, next_tile: tile.x > next_tile.x + VEL + HEIGHT/4
+        ceil = True
+    if direction == "down":
+        sort_func = lambda x: x.row
+        reverse = True
+        delta = (0, VEL)
+        boundary_check = lambda tile: tile.row == 3
+        get_next_tile = lambda tile: tiles.get(f"{tile.row + 1}{tile.col}")
+        check_merge = lambda tile, next_tile: tile.x > next_tile.x - VEL
+        check_move = lambda tile, next_tile: tile.x > next_tile.x - VEL - HEIGHT/4
+        ceil = False
+
 def create_tiles():
     tiles = {}
     for _ in range(1):
@@ -109,6 +151,16 @@ def main(window):
             if event.type == pygame.QUIT:
                 run = False
                 break
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    move_tiles(window, tiles, clock, "left")
+                if event.key == pygame.K_RIGHT:
+                    move_tiles(window, tiles, clock, "right")
+                if event.key == pygame.K_UP:
+                    move_tiles(window, tiles, clock, "up")
+                if event.key == pygame.K_DOWN:
+                    move_tiles(window, tiles, clock, "down")
 
         draw(window, tiles)
     pygame.quit()
