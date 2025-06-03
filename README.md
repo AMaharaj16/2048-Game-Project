@@ -15,14 +15,14 @@ This is a Python implementation of the classic **2048** game, built for the purp
 - Local play via the terminal.
 
 
-## Tech Stack
+## Tech Stack and Technologies Used
 
 - Python 3.x
 - Pygame (for the animated version)
 - VS Code or any Python-compatible code editor
 
 
-## Getting Started
+## Try It Yourself
 
 - Clone the repository.
 - Make sure you have Python 3 installed.
